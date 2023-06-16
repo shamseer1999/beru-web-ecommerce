@@ -23,7 +23,7 @@ class HomeController
 
         if(auth()->guard('admin')->attempt($input))
         {
-            return redirect()->route('admin.dashbord');
+            return redirect()->route('admin.dashboard');
         }else{
             return redirect()->back()->withInput()->with('danger','Invalid login credentials');
         }
