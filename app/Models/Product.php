@@ -18,17 +18,27 @@ class Product extends Model
         'image'
     ];
 
-    protected function status() : Attribute{
-        return Attribute::make(
-            get:fn(string $value) => ($value == 1) ? 'Active' : 'Inactive'
-        );
+    // protected function status() : Attribute{
+    //     return Attribute::make(
+    //         get:fn(string $value) => ($value == 1) ? 'Active' : 'Inactive'
+    //     );
+    // }
+
+    // protected function isFavorite() : Attribute{
+    //     return Attribute::make(
+    //         get:fn(string $value) => ($value == 1) ? 'Yes' : 'No'
+    //     );
+    // }
+
+    public function getStatusTextAttribute(){
+        return ($this->status == 1) ? 'Active' : 'Inactive';
     }
 
-    protected function isFavorite() : Attribute{
-        return Attribute::make(
-            get:fn(string $value) => ($value == 1) ? 'Yes' : 'No'
-        );
+    public function getIsFavoriteTextAttribute(){
+        return ($this->status == 1) ? 'Yes' : 'No';
     }
+
+    protected $appends = ['status_text','is_favorite_text'];
 
     public function category()
     {

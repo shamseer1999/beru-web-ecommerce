@@ -37,6 +37,7 @@
                         <th style="width: 10px">Sl.No</th>
                         <th>Category</th>
                         <th>Product Name</th>
+                        <th>Product Image</th>
                         <th>Price</th>
                         <th>Status</th>
                         <th>Is Favourite</th>
@@ -50,9 +51,10 @@
                                 <td>{{ $loop->index + $result->firstItem() }}</td>
                                 <td>{{ $item->category->name}}</td>
                                 <td>{{ $item->name }}</td>
+                                <td> <img src="{{asset('storage/products/'.$item->image)}}" alt="" width="100"></td>
                                 <td>{{ number_format($item->price,2) }}</td>
-                                <td>{{ $item->status }}</td>
-                                <td>{{ $item->is_favorite }}</td>
+                                <td>{{ $item->status_text }}</td>
+                                <td>{{ $item->is_favorite_text }}</td>
                                 <td>
                                   <a href="{{route('admin.product.edit',encrypt($item->id))}}" class="btn btn-primary"><small>Edit <i class="fa fa-pencil"></i></small></a>
                                   <a href="{{route('admin.product.delete',encrypt($item->id))}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to do this ?')"><small>Delete <i class="fa fa-remove"></i></small></a>

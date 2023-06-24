@@ -7,6 +7,7 @@ use App\Http\Requests\ProductSaveRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProductController
@@ -35,7 +36,7 @@ class ProductController
         if($request->hasFile('image')){
             $extension = $request->image->extension();
             $filename = Str::random(7).'_'.time().'_product.'.$extension;
-            $request->image->storeAs('products',$filename);
+            $request->image->storeAs('public/products',$filename);
         }
         
         $ins_arr = [
@@ -72,9 +73,11 @@ class ProductController
 
             if($request->hasFile('image'))
             {
+                Storage::delete('products/'.$editdata->image);
+
                 $extension = $request->image->extension();
                 $filename = Str::random(7).'_'.time().'_product.'.$extension;
-                $request->image->storeAs('products',$filename);
+                $request->image->storeAs('public/products',$filename);
 
                 $editdata->image = $filename;
             }

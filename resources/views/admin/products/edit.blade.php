@@ -10,6 +10,7 @@
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{route('admin.dashboard')}}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{route('admin.product.list')}}">Products</a></li>
                 <li class="breadcrumb-item active">Edit Product</li>
               </ol>
             </div>
@@ -51,8 +52,8 @@
                               </div>
                               <div class="form-group">
                                 <label for="exampleInputPassword1">Favorite this product ?</label>
-                                <input type="radio" name="faveroite" value="1" {{old('faveroite') == 1 || $editdata->is_favorite == 1 ? 'checked' :''}}><span>Yes</span>
-                                <input type="radio" name="faveroite" value="0" {{old('faveroite') == 0 || $editdata->is_favorite == 0 ? 'checked' :''}}><span>No</span>
+                                <input type="radio" name="faveroite" value="1" @checked($editdata->is_favorite ==1)><span>Yes</span>
+                                <input type="radio" name="faveroite" value="0" @checked($editdata->is_favorite ==0)><span>No</span>
                                 @if ($errors->has('faveroite'))
                                     <span class="text-danger">{{ $errors->first('faveroite') }}</span>
                                 @endif
@@ -74,8 +75,7 @@
                                 @endif
                           </div>
                             <div class="form-group">
-                                <label for="exampleInputFile">Image</label><br>
-                                <a href="">{{ $editdata->image}}</a>
+                                <label for="exampleInputFile">Image</label>
                                 <div class="input-group">
                                   <div class="custom-file">
                                     
@@ -99,7 +99,7 @@
                   <!-- /.card-body -->
   
                   <div class="card-footer">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
                   </div>
                 </form>
               </div>
