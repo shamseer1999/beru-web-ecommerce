@@ -54,8 +54,8 @@
                                 <td>{{ $item->status }}</td>
                                 <td>{{ $item->is_favorite }}</td>
                                 <td>
-                                  <a href="" class="btn btn-primary"><small>Edit <i class="fa fa-pencil"></i></small></a>
-                                  <a href="" class="btn btn-danger"><small>Delete <i class="fa fa-remove"></i></small></a>
+                                  <a href="{{route('admin.product.edit',encrypt($item->id))}}" class="btn btn-primary"><small>Edit <i class="fa fa-pencil"></i></small></a>
+                                  <a href="{{route('admin.product.delete',encrypt($item->id))}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to do this ?')"><small>Delete <i class="fa fa-remove"></i></small></a>
                                 </td>
                               </tr>
                           @endforeach

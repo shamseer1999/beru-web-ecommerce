@@ -17,5 +17,7 @@ Route::prefix('admin')->name('admin.')->group(function(){
         Route::get('list',[ProductController::class,'index'])->name('list');
         Route::get('add',[ProductController::class,'add'])->name('add');
         Route::post('save_product',[ProductController::class,'save'])->name('save');
+        Route::match(['GET','POST'],'edit/{id}',[ProductController::class,'edit'])->name('edit');
+        Route::get('delete/{id}',[ProductController::class,'delete'])->name('delete');
     });
 });

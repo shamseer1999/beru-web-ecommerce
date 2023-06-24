@@ -13,7 +13,7 @@ class ProductController
 {
     public function index()
     {
-        $products = Product::with('category')->orderBy('id','DESC')->paginate(10);
+        $products = Product::with('category')->where('status',1)->orderBy('id','DESC')->paginate(10);
         $data['result'] = $products;
 
         return view('admin.products.index',$data);
@@ -34,7 +34,7 @@ class ProductController
 
         if($request->hasFile('image')){
             $extension = $request->image->extension();
-            $filename = Str::random(7).'_'.time().'_product'.$extension;
+            $filename = Str::random(7).'_'.time().'_product.'.$extension;
             $request->image->storeAs('products',$filename);
         }
         
@@ -49,5 +49,71 @@ class ProductController
         Product::create($ins_arr);
 
         return redirect()->route('admin.product.list')->with('success','Your produuct saved successfully');
+    }
+
+    public function edit(Request $request,$id)
+    {
+        $productId = decrypt($id);
+
+        $editdata = Product::find($productId);
+
+        if(empty($editdata))
+        {
+            return redirect()->route('admin.product.list')->with('danger','No product exist');
+        }
+
+        if($request->isMethod('post'))
+        {
+            $validated =$request->validate([
+                'product_name' => 'required',
+                'price' => 'required|numeric',
+                'category' => 'required',
+            ]);
+
+            if($request->hasFile('image'))
+            {
+                $extension = $request->image->extension();
+                $filename = Str::random(7).'_'.time().'_product.'.$extension;
+                $request->image->storeAs('products',$filename);
+
+                $editdata->image = $filename;
+            }
+
+            $editdata->name = $validated['product_name'];
+
+            $editdata->price = $validated['price'];
+
+            $editdata->category_id = $validated['category'];
+
+            $editdata->is_favorite = $request->faveroite;
+
+            $editdata->save();
+
+            return redirect()->route('admin.product.list')->with('success','Your product is updated successfully');
+        }
+
+        $data['editdata'] = $editdata;
+
+        $data['categories'] = Category::all();
+
+        return view('admin.products.edit',$data);
+    }
+
+    public function delete(Request $request,$id)
+    {
+        $productId = decrypt($id);
+
+        $editdata = Product::find($productId);
+
+        if(empty($editdata))
+        {
+            return redirect()->route('admin.product.list')->with('danger','No product exist');
+        }
+
+        $editdata->status = 0;
+
+        $editdata->save();
+
+        return redirect()->route('admin.product.list')->with('success','Your product is deleted successfully');
     }
 }
