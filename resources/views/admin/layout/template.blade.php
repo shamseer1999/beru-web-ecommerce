@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('plugins/adminlte.min.css')}}">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   
 </head>
 <!--
@@ -35,6 +37,12 @@
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
+    @if (session()->has('success'))
+        <div class="alert alert-success">{{session('success')}}</div>
+    @endif
+    @if (session()->has('danger'))
+        <div class="alert alert-danger">{{session('danger')}}</div>
+    @endif
     {{-- @if ($errors->any())
     <div class="alert alert-danger">
       <ul>
