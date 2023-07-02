@@ -24,13 +24,21 @@
         
       </div>
     @endif
+    @if (session()->has('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{session('success')}}
+        <input type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+        
+      </div>
+    @endif
     <label for="email">Username</label>
-    <input type="text" name="username" autocomplete="off" value="{{old('username')}}" required>
+    <input type="text" name="username" value="{{old('username')}}" required>
   </div>
   <div class="row">
     <label for="password">Password</label>
     <input type="password" name="password">
   </div>
+    <input type="checkbox" name="remember_me" id=""> Remember Me <br>
   <button type="submit">Login</button>
 </form>
 </body>
