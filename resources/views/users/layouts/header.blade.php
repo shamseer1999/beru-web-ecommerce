@@ -9,12 +9,12 @@
                     <div class="top_bar_contact_item">
                         <div class="top_bar_icon"><img
                                 src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918577/phone.png"
-                                alt=""></div>+91 9823 132 111
+                                alt=""></div>+91 9539406750
                     </div>
                     <div class="top_bar_contact_item">
                         <div class="top_bar_icon"><img
                                 src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918597/mail.png"
-                                alt=""></div><a href="mailto:fastsales@gmail.com">contact@bbbootstrap.com</a>
+                                alt=""></div><a href="mailto:fastsales@gmail.com">shamseertt29@gmail.com</a>
                     </div>
                     <div class="top_bar_content ml-auto">
                         <div class="top_bar_user">
@@ -39,7 +39,7 @@
                 <!-- Logo -->
                 <div class="col-lg-2 col-sm-3 col-3 order-1">
                     <div class="logo_container">
-                        <div class="logo"><a href="#">BBB</a></div>
+                        <div class="logo"><a href="#">BERU</a></div>
                     </div>
                 </div>
 
@@ -51,7 +51,7 @@
                                 <form action="#" class="header_search_form clearfix">
                                     <input type="search" required="required" class="header_search_input"
                                         placeholder="Search for products...">
-                                    <div class="custom_dropdown" style="display: none;">
+                                    <div class="custom_dropdown">
                                         <div class="custom_dropdown_list">
                                             <span class="custom_dropdown_placeholder clc">All Categories</span>
                                             <i class="fas fa-chevron-down"></i>
