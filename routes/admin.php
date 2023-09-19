@@ -21,6 +21,7 @@ Route::prefix('admin')->name('admin.')->group(function(){
             Route::get('add',[CategoryController::class,'add'])->name('add');
             Route::post('save_product',[CategoryController::class,'save'])->name('save');
             Route::match(['GET','POST'],'edit/{id}',[CategoryController::class,'edit'])->name('edit');
+            Route::get('delete/{id}',[CategoryController::class,'delete'])->name('delete');
         });
 
         Route::prefix('products')->name('product.')->group(function(){

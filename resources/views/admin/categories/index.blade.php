@@ -47,7 +47,7 @@
                                 <td>{{ $item->name}}</td>
                                 <td>
                                   <a href="{{route('admin.category.edit',encrypt($item->id))}}" class="btn btn-primary"><small>Edit <i class="fa fa-pencil"></i></small></a>
-                                  <a href="{{route('admin.product.delete',encrypt($item->id))}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to do this ?')"><small>Delete <i class="fa fa-remove"></i></small></a>
+                                  {{-- <a href="{{route('admin.category.delete',encrypt($item->id))}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to do this ?')"><small>Delete <i class="fa fa-remove"></i></small></a> --}}
                                 </td>
                               </tr>
                           @endforeach

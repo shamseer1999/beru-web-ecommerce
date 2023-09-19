@@ -65,4 +65,20 @@ class CategoryController
 
         return view('admin.categories.edit',$data);
     }
+
+    public function delete(Request $request,$id)
+    {
+        $categoryId = decrypt($id);
+
+        $editdata = Category::find($categoryId);
+
+        if(empty($editdata))
+        {
+            return redirect()->route('admin.category.list')->with('danger','No category exist');
+        }
+
+        $editdata->delete();
+
+        return redirect()->route('admin.category.list')->with('success','Your category is deleted successfully');
+    }
 }
