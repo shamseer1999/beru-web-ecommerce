@@ -15,7 +15,8 @@ class Product extends Model
         'price',
         'is_favorite',
         'category_id',
-        'image'
+        'image',
+        'product_stock'
     ];
 
     // protected function status() : Attribute{

@@ -39,6 +39,7 @@
                         <th>Product Name</th>
                         <th>Product Image</th>
                         <th>Price</th>
+                        <th>Product Stock</th>
                         <th>Status</th>
                         <th>Is Favourite</th>
                         <th>Action</th>
@@ -53,9 +54,17 @@
                                 <td>{{ $item->name }}</td>
                                 <td> <img src="{{asset('storage/products/'.$item->image)}}" alt="" width="100"></td>
                                 <td>{{ number_format($item->price,2) }}</td>
+                                <td>
+                                  @if ($item->product_stock)
+                                  {{ $item->product_stock}} nos
+                                  @else
+                                  N/A
+                                  @endif
+                                </td>
                                 <td>{{ $item->status_text }}</td>
                                 <td>{{ $item->is_favorite_text }}</td>
                                 <td>
+                                  <a href="{{route('admin.product.update_stock',encrypt($item->id))}}" class="btn btn-success"><small>Update Stock <i class="fa fa-check"></i></small></a>
                                   <a href="{{route('admin.product.edit',encrypt($item->id))}}" class="btn btn-primary"><small>Edit <i class="fa fa-pencil"></i></small></a>
                                   <a href="{{route('admin.product.delete',encrypt($item->id))}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to do this ?')"><small>Delete <i class="fa fa-remove"></i></small></a>
                                 </td>

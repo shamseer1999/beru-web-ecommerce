@@ -44,7 +44,8 @@ class ProductController
             'price' =>$input['price'],
             'category_id' =>$input['category'],
             'is_favorite' =>$input['faveroite'],
-            'image' =>$filename
+            'image' =>$filename,
+            'product_stock'=>$input['product_stock']
         ];
 
         Product::create($ins_arr);
@@ -118,5 +119,27 @@ class ProductController
         $editdata->save();
 
         return redirect()->route('admin.product.list')->with('success','Your product is deleted successfully');
+    }
+
+    public function update_stock(Request $request,$id)
+    {
+        $productId = decrypt($id);
+
+        $editdata = Product::find($productId);
+
+        if($request->isMethod('post'))
+        {
+            $stock = $request->product_stock;
+
+            $editdata->product_stock = $stock;
+
+            $editdata->save();
+
+            return redirect()->route('admin.product.list')->with('success','Your product stock is updated successfully');
+        }
+
+        $data['editdata'] = $editdata;
+
+        return view('admin.products.update_stock',$data);
     }
 }

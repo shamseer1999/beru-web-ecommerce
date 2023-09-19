@@ -27,6 +27,7 @@ class ProductSaveRequest extends FormRequest
             'faveroite' => 'nullable',
             'category' => 'required',
             'image' => 'nullable',
+            'product_stock'=>'required'
         ];
     }
 }

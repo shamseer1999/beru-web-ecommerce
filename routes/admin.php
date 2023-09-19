@@ -30,6 +30,7 @@ Route::prefix('admin')->name('admin.')->group(function(){
             Route::post('save_product',[ProductController::class,'save'])->name('save');
             Route::match(['GET','POST'],'edit/{id}',[ProductController::class,'edit'])->name('edit');
             Route::get('delete/{id}',[ProductController::class,'delete'])->name('delete');
+            Route::match(['GET','POST'],'update-stock/{id}',[ProductController::class,'update_stock'])->name('update_stock');
         });
 
         Route::get('logout',[HomeController::class,'logout'])->name('logout');

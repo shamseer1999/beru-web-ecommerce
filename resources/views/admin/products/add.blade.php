@@ -51,6 +51,13 @@
                                 @endif
                               </div>
                               <div class="form-group">
+                                <label for="exampleInputPassword1">Base Stock <small class="text-danger">*</small></label>
+                                <input type="number" step="0.01" class="form-control" id="product_stock" name="product_stock" value="{{old('product_stock')}}" required>
+                                @if ($errors->has('product_stock'))
+                                    <span class="text-danger">{{ $errors->first('product_stock') }}</span>
+                                @endif
+                              </div>
+                              <div class="form-group">
                                 <label for="exampleInputPassword1">Favorite this product ?</label>
                                 <input type="radio" name="faveroite" value="1" {{old('faveroite') == 1 ? 'checked' :''}}><span>Yes</span>
                                 <input type="radio" name="faveroite" value="0" {{old('faveroite') == 0 ? 'checked' :''}}><span>No</span>
@@ -89,6 +96,7 @@
                                     <span class="text-danger">{{ $errors->first('image') }}</span>
                                 @endif
                               </div>
+                              
                               
                         </div>
                     </div>
