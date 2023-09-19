@@ -49,7 +49,7 @@ class ProductController
 
         Product::create($ins_arr);
 
-        return redirect()->route('admin.product.list')->with('success','Your produuct saved successfully');
+        return redirect()->route('admin.product.list')->with('success','Your product saved successfully');
     }
 
     public function edit(Request $request,$id)
