@@ -57,11 +57,11 @@
                                             <i class="fas fa-chevron-down"></i>
                                             <ul class="custom_list clc">
                                                 <li><a class="clc" href="#">All Categories</a></li>
-                                                <li><a class="clc" href="#">Computers</a></li>
-                                                <li><a class="clc" href="#">Laptops</a></li>
-                                                <li><a class="clc" href="#">Cameras</a></li>
-                                                <li><a class="clc" href="#">Hardware</a></li>
-                                                <li><a class="clc" href="#">Smartphones</a></li>
+                                                @if ($categories)
+                                                    @foreach ($categories as $item)
+                                                        <li><a href="" class="clc">{{ $item->name}}</a></li>
+                                                    @endforeach
+                                                @endif
                                             </ul>
                                         </div>
                                     </div>
