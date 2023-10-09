@@ -36,7 +36,7 @@ class Product extends Model
     }
 
     public function getIsFavoriteTextAttribute(){
-        return ($this->status == 1) ? 'Yes' : 'No';
+        return ($this->is_favorite == 1) ? 'Yes' : 'No';
     }
 
     protected $appends = ['status_text','is_favorite_text'];
