@@ -7,22 +7,28 @@
             <div class="row">
                 <div class="col d-flex flex-row">
                     <div class="top_bar_contact_item">
-                        <div class="top_bar_icon"><img
+                        {{-- <div class="top_bar_icon"><img
                                 src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918577/phone.png"
-                                alt=""></div>+91 9539406750
+                                alt=""></div>+91 9539406750 --}}
                     </div>
                     <div class="top_bar_contact_item">
-                        <div class="top_bar_icon"><img
+                        {{-- <div class="top_bar_icon"><img
                                 src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918597/mail.png"
-                                alt=""></div><a href="mailto:fastsales@gmail.com">shamseertt29@gmail.com</a>
+                                alt=""></div><a href="mailto:fastsales@gmail.com">shamseertt29@gmail.com</a> --}}
                     </div>
                     <div class="top_bar_content ml-auto">
                         <div class="top_bar_user">
                             <div class="user_icon"><img
                                     src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918647/user.svg"
                                     alt=""></div>
-                            <div><a href="#">Register</a></div>
-                            <div><a href="#">Sign in</a></div>
+                                    @if (auth()->guard('admin')->user())
+                                    <div><a href="">{{ auth()->guard('admin')->user()->name}}</a></div>
+                                    <div><a href="{{route('logout_customer')}}"><i class="fa fa-power-off"></i> Logout</a></div>
+                                    @else
+                                    <div><a href="#">Register</a></div>
+                                    <div><a href="#">Sign in</a></div>
+                                    @endif
+
                         </div>
                     </div>
                 </div>
@@ -84,7 +90,11 @@
                                     alt=""></div>
                             <div class="wishlist_content">
                                 <div class="wishlist_text"><a href="#">Wishlist</a></div>
-                                <div class="wishlist_count">10</div>
+                                <div class="wishlist_count">@if ($wishlist)
+                                    {{$wishlist}}
+                                @else
+                                    0
+                                @endif</div>
                             </div>
                         </div>
 
@@ -126,7 +136,7 @@
                         <div class="main_nav_menu">
                             <ul class="standard_dropdown main_nav_dropdown">
                                 <li><a href="#">Home<i class="fas fa-chevron-down"></i></a></li>
-                                
+
                                 {{-- <li class="hassubs">
                                     <a href="#">Pages<i class="fas fa-chevron-down"></i></a>
                                     <ul>
@@ -183,7 +193,7 @@
                             </form>
                         </div>
                         <ul class="page_menu_nav">
-                            
+
                             <li class="page_menu_item">
                                 <a href="#">Home<i class="fa fa-angle-down"></i></a>
                             </li>

@@ -43,7 +43,10 @@
     Open Modal
   </button>
   @if(session('danger'))
-    <div id="successMessage" data-message="{{ session('danger') }}"></div>
+    <div id="dangerMessage" data-message="{{ session('danger') }}"></div>
+@endif
+@if(session('success'))
+    <div id="successMessage" data-message="{{ session('success') }}"></div>
 @endif
             <div class="container-fluid mt-2 mb-5">
                 <div class="products">
@@ -132,6 +135,15 @@ $("#wishlist-btn").click(function(){
         var successMessage = document.getElementById('successMessage');
         if (successMessage) {
             alert(successMessage.getAttribute('data-message'));
+        }
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        var dangerMessage = document.getElementById('dangerMessage');
+        if (dangerMessage) {
+            alert(dangerMessage.getAttribute('data-message'));
         }
     });
 </script>

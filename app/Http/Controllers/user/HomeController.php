@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
 
 class HomeController
@@ -15,11 +16,13 @@ class HomeController
         $categories = Category::all();
         $banners = Banner::all();
         $products = Product::all();
+        $wishlist = Wishlist::where('admin_id', auth()->guard('admin')->user()->id)->count();
 
         $data = [
             'categories'=>$categories,
             'banners'=>$banners,
             'products'=>$products,
+            'wishlist'=>$wishlist
         ];
         return view('users.index',$data);
     }
@@ -68,5 +71,12 @@ class HomeController
                 return redirect()->route('home')->with('danger','Authentication failed');
             }
         }
+    }
+
+    public function logoutCustomer()
+    {
+        auth()->guard('admin')->logout();
+
+        return redirect()->route('home')->with('success','You are successfully logged out');
     }
 }
