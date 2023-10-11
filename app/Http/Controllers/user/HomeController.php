@@ -23,4 +23,20 @@ class HomeController
         ];
         return view('users.index',$data);
     }
+
+    public function addToWishList(Request $request)
+    {
+        if($request->isMethod('post')){
+            $data = $request->id;
+            $checkExist = Product::where('id',$data)->first();
+            if($checkExist)
+            {
+                //TODO:adding
+            }
+            $out = array('message'=>'success','data'=>$checkExist);
+        }else{
+            $out = array('message'=>'failed');
+        }
+        return response()->json($out);
+    }
 }

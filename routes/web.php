@@ -16,3 +16,4 @@ use App\Http\Controllers\user\HomeController;
 */
 
 Route::get('/',[HomeController::class,'index'])->name('home');
+Route::post('/add-to-wishlist',[HomeController::class,'addToWishList'])->name('add_to_wishlist');

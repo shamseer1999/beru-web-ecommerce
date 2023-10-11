@@ -26,8 +26,8 @@
                                             </div>
                                             <hr>
                                             <div class="card-body">
-                                                <div class="text-right buttons"> <button class="btn btn-outline-dark">add to
-                                                        wishlist</button> <button class="btn btn-dark">Add to cart</button>
+                                                <div class="text-right buttons"> <button class="btn btn-outline-dark" id="wishlist-btn" data-id="{{$item->id}}">add to
+                                                        wishlist</button> <button class="btn btn-dark" data-id="{{$item->id}}">Add to cart</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -46,11 +46,35 @@
                     </div>
                 </div>
             </div>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script>
     $(document).ready(function() {
- 
  $(".owl-carousel").owlCarousel();
 
 });
+$("#wishlist-btn").click(function(){
+    var dataId = $(this).attr('data-id')
+    
+    if(dataId){
+        $.ajax({
+            headers:{
+                'X-CSRF-TOKEN': $('meta[name = "csrf-token"]').attr('content')
+            },
+            url:"{{url('/add-to-wishlist')}}",
+            type:'POST',
+            data:{
+                id:dataId
+            },
+            success:function(response){
+                console.log(response)
+                if(response.message){
+                    alert('Item added to wishlist')
+                }else{
+                    alert('Item not added')
+                }
+            }
+        })
+    }
+ })
 </script>
 @endsection
