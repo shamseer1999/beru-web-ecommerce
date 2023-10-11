@@ -27,16 +27,46 @@ class HomeController
     public function addToWishList(Request $request)
     {
         if($request->isMethod('post')){
-            $data = $request->id;
-            $checkExist = Product::where('id',$data)->first();
-            if($checkExist)
+            if(auth()->guard('admin')->user())
             {
-                //TODO:adding
+                $data = $request->id;
+                $checkExist = Product::where('id',$data)->first();
+                if($checkExist)
+                {
+                    Wishlist::create([
+                        'product_id'=>$data,
+                        'admin_id'=>auth()->guard('admin')->user()->id
+                    ]);
+                    $out = array('message'=>'success');
+                }else{
+                    $out = array('message'=>'not_exist');
+                }
+
+            }else{
+                $out = array('message'=>'not_authenticated');
             }
-            $out = array('message'=>'success','data'=>$checkExist);
+
         }else{
             $out = array('message'=>'failed');
         }
         return response()->json($out);
+    }
+
+    public function customerLogin(Request $request)
+    {
+        if($request->isMethod('post'))
+        {
+
+            $username = $request->username;
+            $password = $request->password;
+
+
+            if(auth()->guard('admin')->attempt(['username'=>$username,'password'=>$password]))
+            {
+                return redirect()->route('home');
+            }else{
+                return redirect()->route('home')->with('danger','Authentication failed');
+            }
+        }
     }
 }
