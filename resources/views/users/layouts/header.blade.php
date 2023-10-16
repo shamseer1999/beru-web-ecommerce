@@ -45,7 +45,7 @@
                 <!-- Logo -->
                 <div class="col-lg-2 col-sm-3 col-3 order-1">
                     <div class="logo_container">
-                        <div class="logo"><a href="#">BERU</a></div>
+                        <div class="logo"><a href="{{route('home')}}">BERU</a></div>
                     </div>
                 </div>
 
@@ -63,8 +63,8 @@
                                             <i class="fas fa-chevron-down"></i>
                                             <ul class="custom_list clc">
                                                 <li><a class="clc" href="#">All Categories</a></li>
-                                                @if ($categories)
-                                                    @foreach ($categories as $item)
+                                                @if($categories)
+                                                    @foreach($categories as $item)
                                                         <li><a href="" class="clc">{{ $item->name}}</a></li>
                                                     @endforeach
                                                 @endif
@@ -89,7 +89,7 @@
                                     src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918681/heart.png"
                                     alt=""></div>
                             <div class="wishlist_content">
-                                <div class="wishlist_text"><a href="#">Wishlist</a></div>
+                                <div class="wishlist_text"><a href="{{route('wishlist')}}">Wishlist</a></div>
                                 <div class="wishlist_count">@if ($wishlist)
                                     {{$wishlist}}
                                 @else

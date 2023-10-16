@@ -73,7 +73,7 @@
                                             </div>
                                             <hr>
                                             <div class="card-body">
-                                                <div class="text-right buttons"> <button class="btn btn-outline-dark" id="wishlist-btn" data-id="{{$item->id}}">add to
+                                                <div class="text-right buttons"> <button class="btn btn-outline-dark" id="wishlist-btn" onclick="addToWishlist({{$item->id}})" data-id="{{$item->id}}">add to
                                                         wishlist</button> <button class="btn btn-dark" data-id="{{$item->id}}">Add to cart</button>
                                                 </div>
                                             </div>
@@ -99,9 +99,8 @@
  $(".owl-carousel").owlCarousel();
 
 });
-$("#wishlist-btn").click(function(){
-    var dataId = $(this).attr('data-id')
-
+function addToWishlist(vl){
+    var dataId = vl
     if(dataId){
         $.ajax({
             headers:{
@@ -116,19 +115,49 @@ $("#wishlist-btn").click(function(){
                 console.log(response)
                 if(response.message == 'success'){
                     alert('Item added to wishlist')
+                    location.reload()
                 }else if(response.message == 'not_authenticated'){
                     console.log($('#auth-btn'));
                     $('#auth-btn').click();
                 }else if(response.message == 'not_exist'){
                     alert("Item doesn't exist")
                 }else{
-                    alert('Item not added')
+                    alert(response.message)
                 }
             }
         })
     }
- })
-</script>
+}
+// $("#wishlist-btn").click(function(){
+//     var dataId = $(this).attr('data-id')
+
+//     if(dataId){
+//         $.ajax({
+//             headers:{
+//                 'X-CSRF-TOKEN': $('meta[name = "csrf-token"]').attr('content')
+//             },
+//             url:"{{url('/add-to-wishlist')}}",
+//             type:'POST',
+//             data:{
+//                 id:dataId
+//             },
+//             success:function(response){
+//                 console.log(response)
+//                 if(response.message == 'success'){
+//                     alert('Item added to wishlist')
+//                 }else if(response.message == 'not_authenticated'){
+//                     console.log($('#auth-btn'));
+//                     $('#auth-btn').click();
+//                 }else if(response.message == 'not_exist'){
+//                     alert("Item doesn't exist")
+//                 }else{
+//                     alert('Item not added')
+//                 }
+//             }
+//         })
+//     }
+//  })
+// </script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
 

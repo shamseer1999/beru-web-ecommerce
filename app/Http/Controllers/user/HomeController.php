@@ -16,7 +16,12 @@ class HomeController
         $categories = Category::all();
         $banners = Banner::all();
         $products = Product::all();
-        $wishlist = Wishlist::where('admin_id', auth()->guard('admin')->user()->id)->count();
+        if(auth()->guard('admin')->user()){
+            $wishlist = Wishlist::where('admin_id', auth()->guard('admin')->user()->id)->count();
+        }else{
+            $wishlist = 0;
+        }
+
 
         $data = [
             'categories'=>$categories,
@@ -36,11 +41,20 @@ class HomeController
                 $checkExist = Product::where('id',$data)->first();
                 if($checkExist)
                 {
-                    Wishlist::create([
-                        'product_id'=>$data,
-                        'admin_id'=>auth()->guard('admin')->user()->id
-                    ]);
-                    $out = array('message'=>'success');
+                    $checkwishlist = Wishlist::where([
+                        ['product_id','=',$data],
+                        ['admin_id','=',auth()->guard('admin')->user()->id]
+                    ])->first();
+                    if($checkwishlist){
+                        $out = array('message'=>'item already added');
+                    }else{
+                        Wishlist::create([
+                            'product_id'=>$data,
+                            'admin_id'=>auth()->guard('admin')->user()->id
+                        ]);
+                        $out = array('message'=>'success');
+                    }
+
                 }else{
                     $out = array('message'=>'not_exist');
                 }
@@ -78,5 +92,42 @@ class HomeController
         auth()->guard('admin')->logout();
 
         return redirect()->route('home')->with('success','You are successfully logged out');
+    }
+
+    public function wishlist(Request $request)
+    {
+        if(auth()->guard('admin')->user())
+        {
+            $user = auth()->guard('admin')->user()->id;
+        }else{
+            $user = 0;
+        }
+
+        if(auth()->guard('admin')->user()){
+            $wishlistCount = Wishlist::where('admin_id', auth()->guard('admin')->user()->id)->count();
+        }else{
+            $wishlistCount = 0;
+        }
+        // dd($user);
+        $wishlist = wishlist::with('products')->where('admin_id',$user)->get();
+        //dd($wishlist);
+        $categories = Category::all();
+        $data = [
+            'result' => $wishlist,
+            'categories'=>$categories,
+            'wishlist'=>$wishlistCount
+        ];
+
+        return view('users/wishlist',$data);
+    }
+    public function remove_wishlist(Request $request,$id)
+    {
+        //dd(1);
+        $wishlist = decrypt($id);
+        $find = wishlist::where('id',$wishlist)->first();
+        if($find){
+            $find->delete();
+            return redirect('wishlist');
+        }
     }
 }

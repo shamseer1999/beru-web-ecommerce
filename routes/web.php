@@ -19,3 +19,6 @@ Route::get('/',[HomeController::class,'index'])->name('home');
 Route::post('/add-to-wishlist',[HomeController::class,'addToWishList'])->name('add_to_wishlist');
 Route::post('/customer-login',[HomeController::class,'customerLogin'])->name('customer_login');
 Route::get('logout-customer',[HomeController::class,'logoutCustomer'])->name('logout_customer');
+
+Route::get('/wishlist',[HomeController::class,'wishlist'])->name('wishlist');
+Route::get('/remove_wishlist/{id}',[HomeController::class,'remove_wishlist'])->name('remove_wishlist');
