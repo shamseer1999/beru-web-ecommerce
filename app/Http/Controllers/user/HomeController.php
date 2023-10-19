@@ -7,7 +7,10 @@ use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Wishlist;
+use App\Models\Cart;
+use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class HomeController
 {
@@ -17,9 +20,12 @@ class HomeController
         $banners = Banner::all();
         $products = Product::all();
         if(auth()->guard('admin')->user()){
-            $wishlist = Wishlist::where('admin_id', auth()->guard('admin')->user()->id)->count();
+            $wishlistCount = Wishlist::where('admin_id', auth()->guard('admin')->user()->id)->count();
+            $cartItems = Admin::with('Cart.products')->where('id',auth()->guard('admin')->user()->id)->first();
+            $cartItemsCount = $cartItems->cart->products->count();
         }else{
-            $wishlist = 0;
+            $wishlistCount = 0;
+            $cartItemsCount = 0;
         }
 
 
@@ -27,7 +33,8 @@ class HomeController
             'categories'=>$categories,
             'banners'=>$banners,
             'products'=>$products,
-            'wishlist'=>$wishlist
+            'wishlist'=>$wishlistCount,
+            'cart'=>$cartItemsCount
         ];
         return view('users.index',$data);
     }
@@ -105,8 +112,11 @@ class HomeController
 
         if(auth()->guard('admin')->user()){
             $wishlistCount = Wishlist::where('admin_id', auth()->guard('admin')->user()->id)->count();
+            $cartItems = Admin::with('Cart.products')->where('id',auth()->guard('admin')->user()->id)->first();
+            $cartItemsCount = $cartItems->cart->products->count();
         }else{
             $wishlistCount = 0;
+            $cartItemsCount = 0;
         }
         // dd($user);
         $wishlist = wishlist::with('products')->where('admin_id',$user)->get();
@@ -115,7 +125,8 @@ class HomeController
         $data = [
             'result' => $wishlist,
             'categories'=>$categories,
-            'wishlist'=>$wishlistCount
+            'wishlist'=>$wishlistCount,
+            'cart'=>$cartItemsCount
         ];
 
         return view('users/wishlist',$data);
@@ -128,6 +139,58 @@ class HomeController
         if($find){
             $find->delete();
             return redirect('wishlist');
+        }
+    }
+
+    public function addToCart(Request $request)
+    {
+        if($request->isMethod('POST')){
+            if(auth()->guard('admin')->user()){
+                $data = $request->id;
+                $checkExist = Product::where('id',$data)->first();
+                if($checkExist){
+                    $checkCart = Cart::where([
+                        ['admin_id','=',auth()->guard('admin')->user()->id]
+                    ])->first();
+                    if($checkCart){
+                        $checkProduct = DB::table('cart_products')
+                                ->where('product_id',$data)
+                                ->where('cart_id',$checkCart->id)
+                                ->first();
+                        if($checkProduct){
+                            $out = array('message'=>'Item already added to cart');
+                        }else{
+                            DB::table('cart_products')->insert([
+                                'cart_id'=>$checkCart->id,
+                                'product_id'=>$data,
+                                'created_at'=>date('Y-m-d H:i:s'),
+                                'updated_at'=>date('Y-m-d H:i:s')
+                            ]);
+                            $out = array('message'=>'success','data'=>$checkCart);
+                        }
+
+                    }else{
+                        $cart = Cart::create([
+                            'admin_id'=>auth()->guard('admin')->user()->id
+                        ]);
+
+                        DB::table('cart_products')->insert([
+                            'cart_id'=>$cart->id,
+                            'product_id'=>$data,
+                            'created_at'=>date('Y-m-d H:i:s'),
+                            'updated_at'=>date('Y-m-d H:i:s')
+                        ]);
+
+                        $out = array('message'=>'success','data'=>$cart);
+                    }
+                }else{
+                    $out = array('message'=>'not_exist');
+                }
+            }else{
+                $out = array('message'=>'not_authenticated');
+            }
+
+            return response()->json($out);
         }
     }
 }

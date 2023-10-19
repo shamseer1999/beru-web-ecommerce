@@ -74,7 +74,7 @@
                                             <hr>
                                             <div class="card-body">
                                                 <div class="text-right buttons"> <button class="btn btn-outline-dark" id="wishlist-btn" onclick="addToWishlist({{$item->id}})" data-id="{{$item->id}}">add to
-                                                        wishlist</button> <button class="btn btn-dark" data-id="{{$item->id}}">Add to cart</button>
+                                                        wishlist</button> <button class="btn btn-dark" onclick="addToCart({{$item->id}})" data-id="{{$item->id}}">Add to cart</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -127,6 +127,37 @@ function addToWishlist(vl){
             }
         })
     }
+}
+
+function addToCart(vl){
+    var dataId = vl
+    if(dataId){
+        $.ajax({
+            headers:{
+                'X-CSRF-TOKEN':$('meta[name = "csrf-token"]').attr('content')
+            },
+            url:"{{url('/add-to-cart')}}",
+            type:'POST',
+            data:{
+                id:dataId
+            },
+            success:function(response){
+                console.log(response)
+                if(response.message == 'success'){
+                    alert('Item added to cart successfully')
+                    location.reload()
+                }else if(response.message == 'not_authenticated'){
+                    console.log($('#auth-btn'));
+                    $('#auth-btn').click();
+                }else if(response.message == 'not_exist'){
+                    alert("Item doesn't exist")
+                }else{
+                    alert(response.message)
+                }
+            }
+        })
+    }
+
 }
 // $("#wishlist-btn").click(function(){
 //     var dataId = $(this).attr('data-id')

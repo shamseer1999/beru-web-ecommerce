@@ -17,4 +17,8 @@ class Admin extends Authenticatable
         'username',
         'password'
     ];
+
+    public function Cart(){
+        return $this->hasOne(Cart::class);
+    }
 }

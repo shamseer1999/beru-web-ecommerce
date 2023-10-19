@@ -22,3 +22,5 @@ Route::get('logout-customer',[HomeController::class,'logoutCustomer'])->name('lo
 
 Route::get('/wishlist',[HomeController::class,'wishlist'])->name('wishlist');
 Route::get('/remove_wishlist/{id}',[HomeController::class,'remove_wishlist'])->name('remove_wishlist');
+
+Route::post('/add-to-cart',[HomeController::class,'addToCart'])->name('add_to_cart');

@@ -104,11 +104,15 @@
                                 <div class="cart_icon">
                                     <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918704/cart.png"
                                         alt="">
-                                    <div class="cart_count"><span>3</span></div>
+                                    <div class="cart_count"><span>@if ($cart)
+                                        {{$cart}}
+                                    @else
+                                    0
+                                    @endif</span></div>
                                 </div>
                                 <div class="cart_content">
                                     <div class="cart_text"><a href="#">Cart</a></div>
-                                    <div class="cart_price">$185</div>
+                                    <div class="cart_price"></div>
                                 </div>
                             </div>
                         </div>
