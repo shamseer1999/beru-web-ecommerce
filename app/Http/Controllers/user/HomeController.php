@@ -23,9 +23,12 @@ class HomeController
             $wishlistCount = Wishlist::where('admin_id', auth()->guard('admin')->user()->id)->count();
             $cartItems = Admin::with('Cart.products')->where('id',auth()->guard('admin')->user()->id)->first();
             $cartItemsCount = $cartItems->cart->products->count();
+            $cartCoast = $cartItems->cart->products->pluck('price')->sum();
+
         }else{
             $wishlistCount = 0;
             $cartItemsCount = 0;
+            $cartCoast = 0;
         }
 
 
@@ -34,7 +37,8 @@ class HomeController
             'banners'=>$banners,
             'products'=>$products,
             'wishlist'=>$wishlistCount,
-            'cart'=>$cartItemsCount
+            'cart'=>$cartItemsCount,
+            'cartCoast'=>$cartCoast
         ];
         return view('users.index',$data);
     }
@@ -114,9 +118,11 @@ class HomeController
             $wishlistCount = Wishlist::where('admin_id', auth()->guard('admin')->user()->id)->count();
             $cartItems = Admin::with('Cart.products')->where('id',auth()->guard('admin')->user()->id)->first();
             $cartItemsCount = $cartItems->cart->products->count();
+            $cartCoast = $cartItems->cart->products->pluck('price')->sum();
         }else{
             $wishlistCount = 0;
             $cartItemsCount = 0;
+            $cartCoast = 0;
         }
         // dd($user);
         $wishlist = wishlist::with('products')->where('admin_id',$user)->get();
@@ -126,7 +132,8 @@ class HomeController
             'result' => $wishlist,
             'categories'=>$categories,
             'wishlist'=>$wishlistCount,
-            'cart'=>$cartItemsCount
+            'cart'=>$cartItemsCount,
+            'cartCoast'=>$cartCoast
         ];
 
         return view('users/wishlist',$data);
@@ -192,5 +199,39 @@ class HomeController
 
             return response()->json($out);
         }
+    }
+
+    public function cart(Request $request)
+    {
+        if(auth()->guard('admin')->user())
+        {
+            $user = auth()->guard('admin')->user()->id;
+        }else{
+            $user = 0;
+        }
+
+        if(auth()->guard('admin')->user()){
+            $wishlistCount = Wishlist::where('admin_id', auth()->guard('admin')->user()->id)->count();
+            $cartItems = Admin::with('Cart.products')->where('id',auth()->guard('admin')->user()->id)->first();
+            $cartItemsCount = $cartItems->cart->products->count();
+            $cartCoast = $cartItems->cart->products->pluck('price')->sum();
+        }else{
+            $wishlistCount = 0;
+            $cartItemsCount = 0;
+            $cartCoast = 0;
+        }
+
+        $categories = Category::all();
+
+        $data = [
+            'result' => $cartItems->cart->products,
+            'categories'=>$categories,
+            'wishlist'=>$wishlistCount,
+            'cart'=>$cartItemsCount,
+            'cartCoast'=>$cartCoast
+        ];
+
+        return view('users/cart',$data);
+
     }
 }
