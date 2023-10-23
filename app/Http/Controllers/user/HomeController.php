@@ -170,6 +170,7 @@ class HomeController
                             DB::table('cart_products')->insert([
                                 'cart_id'=>$checkCart->id,
                                 'product_id'=>$data,
+                                'product_count'=>1,
                                 'created_at'=>date('Y-m-d H:i:s'),
                                 'updated_at'=>date('Y-m-d H:i:s')
                             ]);
@@ -184,6 +185,7 @@ class HomeController
                         DB::table('cart_products')->insert([
                             'cart_id'=>$cart->id,
                             'product_id'=>$data,
+                            'product_count'=>1,
                             'created_at'=>date('Y-m-d H:i:s'),
                             'updated_at'=>date('Y-m-d H:i:s')
                         ]);
@@ -212,10 +214,10 @@ class HomeController
 
         if(auth()->guard('admin')->user()){
             $wishlistCount = Wishlist::where('admin_id', auth()->guard('admin')->user()->id)->count();
-            $cartItems = Admin::with('Cart.products')->where('id',auth()->guard('admin')->user()->id)->first();
+            $cartItems = Admin::with('Cart.productsWithPivot')->where('id',auth()->guard('admin')->user()->id)->first();
             $cartItemsCount = $cartItems->cart->products->count();
             $cartCoast = $cartItems->cart->products->pluck('price')->sum();
-            $result = $cartItems->cart->products;
+            $result = $cartItems;
         }else{
             $wishlistCount = 0;
             $cartItemsCount = 0;
@@ -245,5 +247,19 @@ class HomeController
         $cart = auth()->guard('admin')->user()->cart;
         $cart->products()->detach($itemId); // related product remove
         return redirect()->route('cart');
+    }
+
+    public function addMoreItems(Request $request)
+    {
+        if($request->isMethod('POST')){
+            $pivot = $request->pivot_id;
+            $data = DB::table('cart_products')->where('id','=',$pivot)->first();
+            $count = $data->product_count;
+            DB::table('cart_products')->where('id','=',$pivot)->update([
+                'product_count'=>$count +1
+            ]);
+            $out = array('data'=>$count+1);
+            return response()->json($out);
+        }
     }
 }

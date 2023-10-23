@@ -26,3 +26,4 @@ Route::get('/remove_wishlist/{id}',[HomeController::class,'remove_wishlist'])->n
 Route::post('/add-to-cart',[HomeController::class,'addToCart'])->name('add_to_cart');
 Route::get('/cart',[HomeController::class,'cart'])->name('cart');
 Route::get('/remove-cart-item/{id}',[HomeController::class,'removeCartItem'])->name('remove-cart-item');
+Route::post('/add-more-items',[HomeController::class,'addMoreItems'])->name('add_more_items');
