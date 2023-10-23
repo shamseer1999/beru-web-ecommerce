@@ -215,23 +215,35 @@ class HomeController
             $cartItems = Admin::with('Cart.products')->where('id',auth()->guard('admin')->user()->id)->first();
             $cartItemsCount = $cartItems->cart->products->count();
             $cartCoast = $cartItems->cart->products->pluck('price')->sum();
+            $result = $cartItems->cart->products;
         }else{
             $wishlistCount = 0;
             $cartItemsCount = 0;
             $cartCoast = 0;
+            $result = '';
         }
 
         $categories = Category::all();
 
         $data = [
-            'result' => $cartItems->cart->products,
+            'result' =>$result,
             'categories'=>$categories,
             'wishlist'=>$wishlistCount,
             'cart'=>$cartItemsCount,
             'cartCoast'=>$cartCoast
         ];
 
+        //dd($data['result']);
+
         return view('users/cart',$data);
 
+    }
+
+    public function removeCartItem(Request $request,$id)
+    {
+        $itemId = decrypt($id);
+        $cart = auth()->guard('admin')->user()->cart;
+        $cart->products()->detach($itemId); // related product remove
+        return redirect()->route('cart');
     }
 }
