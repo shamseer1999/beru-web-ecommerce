@@ -262,4 +262,20 @@ class HomeController
             return response()->json($out);
         }
     }
+
+    public function reduceItemCount(Request $request)
+    {
+        if($request->isMethod('POST'))
+        {
+            $pivot = $request->pivot_id;
+            $data = DB::table('cart_products')->where('id','=',$pivot)->first();
+            $count = $data->product_count;
+            DB::table('cart_products')->where('id','=',$pivot)->update([
+                'product_count'=>$count - 1
+            ]);
+
+            $out = array('data'=>$count - 1);
+            return response()->json($out);
+        }
+    }
 }

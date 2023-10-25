@@ -31,7 +31,7 @@
                         <div>
                           <i class="fa fa-plus add-more" data-id="{{ $item->pivot->id }}"></i>
                           <input type="number" style="width:15%;text-align:center" id="count-id-{{ $item->pivot->id }}" value="{{ $item->pivot->product_count }}">
-                          <i class="fa fa-minus"></i>
+                          <i class="fa fa-minus reduce-count" data-id="{{ $item->pivot->id }}"></i>
                         </div>
 
                       </div>
@@ -64,6 +64,31 @@
                     }
                 })
             }
+        })
+
+        $('.reduce-count').on('click',function(){
+
+          var dataId = $(this).data('id')
+          if(dataId){
+            if($("#count-id-"+dataId).val() == 1){
+                alert('Atleast one item would be exist');
+                return false;
+            }
+            $.ajax({
+              headers:{
+                'X-CSRF-TOKEN':$('meta[name = "csrf-token"]').attr('content')
+              },
+              url:'{{ url("/reduce-item-count") }}',
+              type:'POST',
+              data:{
+                'pivot_id':dataId
+              },
+              success:function(response){
+                $("#count-id-"+dataId).val(response.data)
+                //console.log(response)
+              }
+            })
+          }
         })
     })
 </script>
