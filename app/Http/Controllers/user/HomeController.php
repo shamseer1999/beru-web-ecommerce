@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Wishlist;
 use App\Models\Cart;
 use App\Models\Admin;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -89,7 +90,7 @@ class HomeController
             $password = $request->password;
 
 
-            if(auth()->guard('admin')->attempt(['username'=>$username,'password'=>$password]))
+            if(auth()->guard('customer')->attempt(['phone_no'=>$username,'password'=>$password]))
             {
                 return redirect()->route('home');
             }else{
@@ -100,7 +101,7 @@ class HomeController
 
     public function logoutCustomer()
     {
-        auth()->guard('admin')->logout();
+        auth()->guard('customer')->logout();
 
         return redirect()->route('home')->with('success','You are successfully logged out');
     }
@@ -276,6 +277,33 @@ class HomeController
 
             $out = array('data'=>$count - 1);
             return response()->json($out);
+        }
+    }
+
+    public function customerSignIn(Request $request)
+    {
+        if($request->isMethod('POST'))
+        {
+            $customerName = $request->customer_name;
+            $phone = $request->phone_no;
+            $password = $request->password;
+            $place=$request->place;
+
+            $checkCustomer = Customer::where('phone_no','=',$phone)->first();
+            if($checkCustomer){
+                return redirect()->route('home')->with('danger','Your account is already registerd!Please login');
+            }else{
+                $customer = Customer::create([
+                    'customer_name'=>$customerName,
+                    'phone_no'=>$phone,
+                    'password'=>bcrypt($password),
+                    'place'=>$place
+                ]);
+                if(auth()->guard('customer')->attempt(['phone_no'=>$phone,'password'=>$password]))
+                {
+                    return redirect()->route('home');
+                }
+            }
         }
     }
 }

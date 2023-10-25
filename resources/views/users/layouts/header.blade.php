@@ -21,8 +21,8 @@
                             <div class="user_icon"><img
                                     src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918647/user.svg"
                                     alt=""></div>
-                                    @if (auth()->guard('admin')->user())
-                                    <div><a href="">{{ auth()->guard('admin')->user()->name}}</a></div>
+                                    @if (auth()->guard('customer')->user())
+                                    <div><a href="">{{ auth()->guard('customer')->user()->customer_name}}</a></div>
                                     <div><a href="{{route('logout_customer')}}"><i class="fa fa-power-off"></i> Logout</a></div>
                                     @else
                                     <div><a href="#">Register</a></div>

@@ -12,11 +12,12 @@
 
         <!-- Modal body -->
         <div class="modal-body">
-          <p>You have an account.please login</p>
-          <form action="{{route('customer_login')}}" method="post">
+
+          <form action="{{route('customer_login')}}" method="post" id="login-form" style="display:none;">
+            <p>You have an account.please login</p>
             @csrf
             <div class="form-group">
-                <label for="">Username</label>
+                <label for="">Phone No</label>
                 <input type="text" class="form-control" name="username">
             </div>
             <div class="form-group">
@@ -26,7 +27,32 @@
             <div class="form-group">
                 <br>
                 <input type="submit" value="Login" class="btn btn-primary btn-md" style="width:100%;">
-                <label for="">You don't have an account <a href="">SignIn</a></label>
+                <label for="">You don't have an account <a style="cursor: pointer" class="btn" id="signin-redir">SignIn</a></label>
+            </div>
+          </form>
+          <form action="{{ route('customer_signin') }}" method="POST" id="sign-in-form" style="display: none">
+            @csrf
+            <p>Sign In</p>
+            <div class="form-group">
+                <label for="">Name</label>
+                <input type="text" name="customer_name" id="" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="">Phone No</label>
+                <input type="text" name="phone_no" id="" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="">Place</label>
+                <input type="text" name="place" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="">Password</label>
+                <input type="password" name="password" id="" class="form-control">
+            </div>
+            <div class="form-group">
+                <br>
+                <input type="submit" value="Sign In" class="btn btn-primary btn-md" style="width:100%">
+                <label for="">You have already an account <a style="cursor: pointer" class="btn" id="login-redir">Login</a></label>
             </div>
           </form>
         </div>
@@ -99,6 +125,16 @@
  $(".owl-carousel").owlCarousel();
 
 });
+$("#signin-redir").on('click',function(){
+    $("#login-form").hide()
+    $("#sign-in-form").show()
+})
+
+$("#login-redir").on('click',function(){
+    $("#sign-in-form").hide()
+    $("#login-form").show()
+ })
+
 function addToWishlist(vl){
     var dataId = vl
     if(dataId){
@@ -118,6 +154,8 @@ function addToWishlist(vl){
                     location.reload()
                 }else if(response.message == 'not_authenticated'){
                     console.log($('#auth-btn'));
+                    $("#sign-in-form").hide()
+                    $("#login-form").show()
                     $('#auth-btn').click();
                 }else if(response.message == 'not_exist'){
                     alert("Item doesn't exist")
@@ -148,6 +186,8 @@ function addToCart(vl){
                     location.reload()
                 }else if(response.message == 'not_authenticated'){
                     console.log($('#auth-btn'));
+                    $("#sign-in-form").hide()
+                    $("#login-form").show()
                     $('#auth-btn').click();
                 }else if(response.message == 'not_exist'){
                     alert("Item doesn't exist")
