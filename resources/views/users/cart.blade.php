@@ -9,7 +9,7 @@
   margin: 3px;
   }
   .price-div p{
-    margin:3px;
+    margin:1px;
   }
   .price-div i{
     cursor: pointer;
@@ -27,7 +27,8 @@
                       <img src="{{ asset('storage/products/'.$item->image)}}" alt="" style="width:100%;object-fit:cover;">
 
                       <div class="price-div">
-                        <p>₹ {{ $item->price }}</p>
+                        <input type="hidden" id="single-price" value="{{ $item->price }}">
+                        <p id="price-section{{ $item->pivot->id }}">₹ {{ $item->price * $item->pivot->product_count }}</p>
                         <div>
                           <i class="fa fa-plus add-more" data-id="{{ $item->pivot->id }}"></i>
                           <input type="number" style="width:15%;text-align:center" id="count-id-{{ $item->pivot->id }}" value="{{ $item->pivot->product_count }}">
@@ -59,7 +60,10 @@
                         'pivot_id':dataId
                     },
                     success:function(response){
+                        var singlePrice = $("#single-price").val()
                         $("#count-id-"+dataId).val(response.data)
+                        var newPrice = singlePrice * response.data
+                        $("#price-section"+dataId).text('₹'+newPrice)
                         //console.log(response);
                     }
                 })
@@ -84,7 +88,10 @@
                 'pivot_id':dataId
               },
               success:function(response){
+                var singlePrice = $("#single-price").val()
                 $("#count-id-"+dataId).val(response.data)
+                var newPrice = singlePrice * response.data
+                $("#price-section"+dataId).text('₹'+newPrice)
                 //console.log(response)
               }
             })
