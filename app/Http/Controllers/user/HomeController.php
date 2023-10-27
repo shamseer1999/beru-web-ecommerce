@@ -20,11 +20,17 @@ class HomeController
         $categories = Category::all();
         $banners = Banner::all();
         $products = Product::all();
-        if(auth()->guard('admin')->user()){
-            $wishlistCount = Wishlist::where('admin_id', auth()->guard('admin')->user()->id)->count();
-            $cartItems = Admin::with('Cart.products')->where('id',auth()->guard('admin')->user()->id)->first();
-            $cartItemsCount = $cartItems->cart->products->count();
-            $cartCoast = $cartItems->cart->products->pluck('price')->sum();
+        if(auth()->guard('customer')->user()){
+            $wishlistCount = Wishlist::where('customer_id', auth()->guard('customer')->user()->id)->count();
+            $cartItems = Customer::with('Cart.products')->where('id',auth()->guard('customer')->user()->id)->first();
+            if(!empty($cartItems->cart->products)){
+                $cartItemsCount = $cartItems->cart->products->count();
+                $cartCoast = $cartItems->cart->products->pluck('price')->sum();
+            }else{
+                $cartItemsCount = 0;
+                $cartCoast = 0;
+            }
+
 
         }else{
             $wishlistCount = 0;
@@ -47,7 +53,7 @@ class HomeController
     public function addToWishList(Request $request)
     {
         if($request->isMethod('post')){
-            if(auth()->guard('admin')->user())
+            if(auth()->guard('customer')->user())
             {
                 $data = $request->id;
                 $checkExist = Product::where('id',$data)->first();
@@ -55,14 +61,14 @@ class HomeController
                 {
                     $checkwishlist = Wishlist::where([
                         ['product_id','=',$data],
-                        ['admin_id','=',auth()->guard('admin')->user()->id]
+                        ['customer_id','=',auth()->guard('customer')->user()->id]
                     ])->first();
                     if($checkwishlist){
                         $out = array('message'=>'item already added');
                     }else{
                         Wishlist::create([
                             'product_id'=>$data,
-                            'admin_id'=>auth()->guard('admin')->user()->id
+                            'customer_id'=>auth()->guard('customer')->user()->id
                         ]);
                         $out = array('message'=>'success');
                     }
@@ -108,25 +114,33 @@ class HomeController
 
     public function wishlist(Request $request)
     {
-        if(auth()->guard('admin')->user())
+        if(auth()->guard('customer')->user())
         {
-            $user = auth()->guard('admin')->user()->id;
+            $user = auth()->guard('customer')->user()->id;
         }else{
             $user = 0;
         }
 
-        if(auth()->guard('admin')->user()){
-            $wishlistCount = Wishlist::where('admin_id', auth()->guard('admin')->user()->id)->count();
-            $cartItems = Admin::with('Cart.products')->where('id',auth()->guard('admin')->user()->id)->first();
-            $cartItemsCount = $cartItems->cart->products->count();
-            $cartCoast = $cartItems->cart->products->pluck('price')->sum();
+        if(auth()->guard('customer')->user()){
+            $wishlistCount = Wishlist::where('customer_id', auth()->guard('customer')->user()->id)->count();
+            $cartItems = Customer::with('Cart.products')->where('id',auth()->guard('customer')->user()->id)->first();
+            if(!empty($cartItems->cart->products))
+            {
+                $cartItemsCount = $cartItems->cart->products->count();
+                $cartCoast = $cartItems->cart->products->pluck('price')->sum();
+            }else{
+                $cartItemsCount = 0;
+                $cartCoast = 0;
+            }
+
+
         }else{
             $wishlistCount = 0;
             $cartItemsCount = 0;
             $cartCoast = 0;
         }
         // dd($user);
-        $wishlist = wishlist::with('products')->where('admin_id',$user)->get();
+        $wishlist = wishlist::with('products')->where('customer_id',$user)->get();
         //dd($wishlist);
         $categories = Category::all();
         $data = [
@@ -153,12 +167,12 @@ class HomeController
     public function addToCart(Request $request)
     {
         if($request->isMethod('POST')){
-            if(auth()->guard('admin')->user()){
+            if(auth()->guard('customer')->user()){
                 $data = $request->id;
                 $checkExist = Product::where('id',$data)->first();
                 if($checkExist){
                     $checkCart = Cart::where([
-                        ['admin_id','=',auth()->guard('admin')->user()->id]
+                        ['customer_id','=',auth()->guard('customer')->user()->id]
                     ])->first();
                     if($checkCart){
                         $checkProduct = DB::table('cart_products')
@@ -180,7 +194,7 @@ class HomeController
 
                     }else{
                         $cart = Cart::create([
-                            'admin_id'=>auth()->guard('admin')->user()->id
+                            'customer_id'=>auth()->guard('customer')->user()->id
                         ]);
 
                         DB::table('cart_products')->insert([
@@ -206,19 +220,31 @@ class HomeController
 
     public function cart(Request $request)
     {
-        if(auth()->guard('admin')->user())
+        if(auth()->guard('customer')->user())
         {
-            $user = auth()->guard('admin')->user()->id;
+            $user = auth()->guard('customer')->user()->id;
         }else{
             $user = 0;
         }
 
-        if(auth()->guard('admin')->user()){
-            $wishlistCount = Wishlist::where('admin_id', auth()->guard('admin')->user()->id)->count();
-            $cartItems = Admin::with('Cart.productsWithPivot')->where('id',auth()->guard('admin')->user()->id)->first();
-            $cartItemsCount = $cartItems->cart->products->count();
-            $cartCoast = $cartItems->cart->products->pluck('price')->sum();
-            $result = $cartItems;
+        if(auth()->guard('customer')->user()){
+            $wishlistCount = Wishlist::where('customer_id', auth()->guard('customer')->user()->id)->count();
+            $cartItems = Customer::with('Cart.productsWithPivot')->where('id',auth()->guard('customer')->user()->id)->first();
+            //dd($cartItems);
+            if(!empty($cartItems->cart->products)){
+                $cartItemsCount = $cartItems->cart->products->count();
+                $cartCoast = $cartItems->cart->products->pluck('price')->sum();
+            }else{
+                $cartItemsCount = 0;
+                $cartCoast = 0;
+            }
+            if(!empty($cartItems->cart))
+            {
+                $result = $cartItems;
+            }else{
+                $result='';
+            }
+
         }else{
             $wishlistCount = 0;
             $cartItemsCount = 0;
@@ -245,7 +271,7 @@ class HomeController
     public function removeCartItem(Request $request,$id)
     {
         $itemId = decrypt($id);
-        $cart = auth()->guard('admin')->user()->cart;
+        $cart = auth()->guard('customer')->user()->cart;
         $cart->products()->detach($itemId); // related product remove
         return redirect()->route('cart');
     }

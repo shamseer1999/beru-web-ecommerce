@@ -12,7 +12,7 @@ class Wishlist extends Model
 
     protected $table = 'wishlist';
 
-    protected $fillable = ['product_id','admin_id'];
+    protected $fillable = ['product_id','customer_id'];
 
     public function products(){
         return $this->hasmany(product::class,'id','product_id');
