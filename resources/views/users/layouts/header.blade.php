@@ -90,11 +90,7 @@
                                     alt=""></div>
                             <div class="wishlist_content">
                                 <div class="wishlist_text"><a href="{{route('wishlist')}}">Wishlist</a></div>
-                                <div class="wishlist_count">@if ($wishlist)
-                                    {{$wishlist}}
-                                @else
-                                    0
-                                @endif</div>
+                                <div class="wishlist_count">{{ $wishlistcounts }}</div>
                             </div>
                         </div>
 
@@ -104,15 +100,11 @@
                                 <div class="cart_icon">
                                     <img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560918704/cart.png"
                                         alt="">
-                                    <div class="cart_count"><span>@if ($cart)
-                                        {{$cart}}
-                                    @else
-                                    0
-                                    @endif</span></div>
+                                    <div class="cart_count"><span>{{ $cartitemscounts }}</span></div>
                                 </div>
                                 <div class="cart_content">
                                     <div class="cart_text"><a href="{{ route('cart') }}">Cart</a></div>
-                                    <div class="cart_price">₹ {{ $cartCoast }}</div>
+                                    <div class="cart_price">₹ {{ $cartcoasts }}</div>
                                 </div>
                             </div>
                         </div>

@@ -15,37 +15,45 @@ use Illuminate\Support\Facades\DB;
 
 class HomeController
 {
+    private $wishlistCounts;
+    private $cartItemsCounts;
+    private $cartCoasts;
+
+    public function __construct()
+    {
+        if(auth()->guard('customer')->user())
+        {
+            $this->wishlistCounts = Wishlist::where('customer_id', auth()->guard('customer')->user()->id)->count();
+            $cartItems = Customer::with('Cart.products')->where('id',auth()->guard('customer')->user()->id)->first();
+            if(!empty($cartItems->cart->products)){
+                $this->cartItemsCounts = $cartItems->cart->products->count();
+                $this->cartCoasts = $cartItems->cart->products->pluck('price')->sum();
+            }else{
+                $this->cartItemsCounts = 0;
+                $this->cartCoasts = 0;
+            }
+        }else{
+            $this->wishlistCounts = 0;
+            $this->cartItemsCounts = 0;
+            $this->cartCoasts = 0;
+        }
+
+        view()->share('wishlistcounts',$this->wishlistCounts);
+        view()->share('cartitemscounts',$this->cartItemsCounts);
+        view()->share('cartcoasts',$this->cartCoasts);
+
+    }
     public function index()
     {
         $categories = Category::all();
         $banners = Banner::all();
         $products = Product::all();
-        if(auth()->guard('customer')->user()){
-            $wishlistCount = Wishlist::where('customer_id', auth()->guard('customer')->user()->id)->count();
-            $cartItems = Customer::with('Cart.products')->where('id',auth()->guard('customer')->user()->id)->first();
-            if(!empty($cartItems->cart->products)){
-                $cartItemsCount = $cartItems->cart->products->count();
-                $cartCoast = $cartItems->cart->products->pluck('price')->sum();
-            }else{
-                $cartItemsCount = 0;
-                $cartCoast = 0;
-            }
-
-
-        }else{
-            $wishlistCount = 0;
-            $cartItemsCount = 0;
-            $cartCoast = 0;
-        }
 
 
         $data = [
             'categories'=>$categories,
             'banners'=>$banners,
             'products'=>$products,
-            'wishlist'=>$wishlistCount,
-            'cart'=>$cartItemsCount,
-            'cartCoast'=>$cartCoast
         ];
         return view('users.index',$data);
     }
@@ -121,24 +129,6 @@ class HomeController
             $user = 0;
         }
 
-        if(auth()->guard('customer')->user()){
-            $wishlistCount = Wishlist::where('customer_id', auth()->guard('customer')->user()->id)->count();
-            $cartItems = Customer::with('Cart.products')->where('id',auth()->guard('customer')->user()->id)->first();
-            if(!empty($cartItems->cart->products))
-            {
-                $cartItemsCount = $cartItems->cart->products->count();
-                $cartCoast = $cartItems->cart->products->pluck('price')->sum();
-            }else{
-                $cartItemsCount = 0;
-                $cartCoast = 0;
-            }
-
-
-        }else{
-            $wishlistCount = 0;
-            $cartItemsCount = 0;
-            $cartCoast = 0;
-        }
         // dd($user);
         $wishlist = wishlist::with('products')->where('customer_id',$user)->get();
         //dd($wishlist);
@@ -146,9 +136,6 @@ class HomeController
         $data = [
             'result' => $wishlist,
             'categories'=>$categories,
-            'wishlist'=>$wishlistCount,
-            'cart'=>$cartItemsCount,
-            'cartCoast'=>$cartCoast
         ];
 
         return view('users/wishlist',$data);
@@ -228,16 +215,8 @@ class HomeController
         }
 
         if(auth()->guard('customer')->user()){
-            $wishlistCount = Wishlist::where('customer_id', auth()->guard('customer')->user()->id)->count();
             $cartItems = Customer::with('Cart.productsWithPivot')->where('id',auth()->guard('customer')->user()->id)->first();
-            //dd($cartItems);
-            if(!empty($cartItems->cart->products)){
-                $cartItemsCount = $cartItems->cart->products->count();
-                $cartCoast = $cartItems->cart->products->pluck('price')->sum();
-            }else{
-                $cartItemsCount = 0;
-                $cartCoast = 0;
-            }
+
             if(!empty($cartItems->cart))
             {
                 $result = $cartItems;
@@ -246,9 +225,6 @@ class HomeController
             }
 
         }else{
-            $wishlistCount = 0;
-            $cartItemsCount = 0;
-            $cartCoast = 0;
             $result = '';
         }
 
@@ -257,9 +233,6 @@ class HomeController
         $data = [
             'result' =>$result,
             'categories'=>$categories,
-            'wishlist'=>$wishlistCount,
-            'cart'=>$cartItemsCount,
-            'cartCoast'=>$cartCoast
         ];
 
         //dd($data['result']);
