@@ -64,6 +64,7 @@
                         $("#count-id-"+dataId).val(response.data)
                         var newPrice = singlePrice * response.data
                         $("#price-section"+dataId).text('₹'+newPrice)
+                        location.reload()
                         //console.log(response);
                     }
                 })
@@ -92,6 +93,7 @@
                 $("#count-id-"+dataId).val(response.data)
                 var newPrice = singlePrice * response.data
                 $("#price-section"+dataId).text('₹'+newPrice)
+                location.reload()
                 //console.log(response)
               }
             })

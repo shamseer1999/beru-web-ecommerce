@@ -24,10 +24,13 @@ class HomeController
         if(auth()->guard('customer')->user())
         {
             $this->wishlistCounts = Wishlist::where('customer_id', auth()->guard('customer')->user()->id)->count();
-            $cartItems = Customer::with('Cart.products')->where('id',auth()->guard('customer')->user()->id)->first();
-            if(!empty($cartItems->cart->products)){
-                $this->cartItemsCounts = $cartItems->cart->products->count();
-                $this->cartCoasts = $cartItems->cart->products->pluck('price')->sum();
+            $cartItems = Customer::with('Cart.productsWithPivot')->where('id',auth()->guard('customer')->user()->id)->first();
+            if(!empty($cartItems->cart->productsWithPivot)){
+                $this->cartItemsCounts = $cartItems->cart->productsWithPivot->count();
+                $this->cartCoasts = $price_sum =$cartItems->cart->productsWithPivot->sum(function($product){
+                    return $product->price * $product->pivot->product_count;
+                });
+                //dd($price_sum);
             }else{
                 $this->cartItemsCounts = 0;
                 $this->cartCoasts = 0;
