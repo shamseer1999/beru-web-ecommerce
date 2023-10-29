@@ -210,6 +210,10 @@ function clickAuth(vl)
     }
     $('#auth-btn').click();
 }
+function addtoInput(vl)
+{
+    $("#dorop_down_list").val(vl)
+}
 // $("#wishlist-btn").click(function(){
 //     var dataId = $(this).attr('data-id')
 

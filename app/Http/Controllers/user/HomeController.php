@@ -43,11 +43,17 @@ class HomeController
         view()->share('cartcoasts',$this->cartCoasts);
 
     }
-    public function index()
+    public function index(Request $request)
     {
         $categories = Category::all();
         $banners = Banner::all();
-        $products = Product::all();
+        $products = Product::when($request->search != null,function($query) use($request){
+            return $query->where('name','like','%'.$request->search.'%');
+        })
+        ->when($request->dorop_down_list !=null,function($query) use($request){
+            return $query->where('category_id',$request->dorop_down_list);
+        })
+        ->get();
 
 
         $data = [

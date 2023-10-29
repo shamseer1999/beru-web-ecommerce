@@ -54,18 +54,33 @@
                     <div class="header_search">
                         <div class="header_search_content">
                             <div class="header_search_form_container">
-                                <form action="#" class="header_search_form clearfix">
-                                    <input type="search" required="required" class="header_search_input"
-                                        placeholder="Search for products...">
+                                <form action="" class="header_search_form clearfix" id="filter-form" method="GET">
+                                    <input type="search" class="header_search_input"
+                                        placeholder="Search for products..." name="search" value="{{ Request::get('search') }}">
                                     <div class="custom_dropdown">
+                                        <input type="hidden" name="dorop_down_list" id="dorop_down_list" value="{{ Request::get('dorop_down_list') }}">
                                         <div class="custom_dropdown_list">
-                                            <span class="custom_dropdown_placeholder clc">All Categories</span>
+                                            <span class="custom_dropdown_placeholder clc">@if (Request::get('dorop_down_list') != '')
+                                                @if (Request::get('dorop_down_list') == 0)
+                                                All Categories
+                                                @else
+                                                    @if ($categories)
+                                                        @foreach ($categories as $val)
+                                                            @if ($val->id == Request::get('dorop_down_list'))
+                                                                {{ $val->name }}
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                @endif
+                                            @else
+                                            All Categories
+                                            @endif</span>
                                             <i class="fas fa-chevron-down"></i>
                                             <ul class="custom_list clc">
-                                                <li><a class="clc" href="#">All Categories</a></li>
+                                                <li onclick="addtoInput(0)"><a class="clc" href="#">All Categories</a></li>
                                                 @if($categories)
                                                     @foreach($categories as $item)
-                                                        <li><a href="" class="clc">{{ $item->name}}</a></li>
+                                                        <li onclick="addtoInput({{ $item->id }})"><a href="" class="clc">{{ $item->name}}</a></li>
                                                     @endforeach
                                                 @endif
                                             </ul>
