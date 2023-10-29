@@ -199,6 +199,17 @@ function addToCart(vl){
     }
 
 }
+function clickAuth(vl)
+{
+    if( vl == 1){
+        $("#sign-in-form").show()
+        $("#login-form").hide()
+    }else{
+        $("#sign-in-form").hide()
+        $("#login-form").show()
+    }
+    $('#auth-btn').click();
+}
 // $("#wishlist-btn").click(function(){
 //     var dataId = $(this).attr('data-id')
 

@@ -25,8 +25,8 @@
                                     <div><a href="">{{ auth()->guard('customer')->user()->customer_name}}</a></div>
                                     <div><a href="{{route('logout_customer')}}"><i class="fa fa-power-off"></i> Logout</a></div>
                                     @else
-                                    <div><a href="#">Register</a></div>
-                                    <div><a href="#">Sign in</a></div>
+                                    <div><a style="cursor: pointer" onclick="clickAuth(1)">Register</a></div>
+                                    <div><a style="cursor: pointer" onclick="clickAuth(2)">Sign in</a></div>
                                     @endif
 
                         </div>
