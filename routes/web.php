@@ -29,3 +29,5 @@ Route::get('/cart',[HomeController::class,'cart'])->name('cart');
 Route::get('/remove-cart-item/{id}',[HomeController::class,'removeCartItem'])->name('remove-cart-item');
 Route::post('/add-more-items',[HomeController::class,'addMoreItems'])->name('add_more_items');
 Route::post('/reduce-item-count',[HomeController::class,'reduceItemCount'])->name('reduce-item-count');
+
+Route::get('/place-order',[HomeController::class,'placeOrder'])->name('place_order');

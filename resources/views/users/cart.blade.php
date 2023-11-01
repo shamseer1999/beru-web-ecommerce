@@ -41,7 +41,7 @@
         </div>
       </div>
     @endforeach
-    <a href="" class="btn btn-outline-success btn-lg" style="float:right;margin:10px 10px">Place Order</a>
+    <a href="{{ route('place_order') }}" class="btn btn-outline-success btn-lg" style="float:right;margin:10px 10px">Place Order</a>
 @endif
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script>

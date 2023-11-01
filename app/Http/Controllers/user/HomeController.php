@@ -314,4 +314,16 @@ class HomeController
             }
         }
     }
+
+    // Cart
+    public function placeOrder(Request $request)
+    {
+        $userId = auth()->guard('customer')->user()->id;
+        $cartItems = Customer::with('Cart.productsWithPivot')->where('id',auth()->guard('customer')->user()->id)->first();
+        // dd($cartItems);
+        $data=[
+            'result'=>$cartItems
+        ];
+        return view('users/place_order',$data);
+    }
 }
