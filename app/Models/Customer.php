@@ -10,7 +10,7 @@ class Customer extends Authenticatable
 {
     use HasFactory;
 
-    protected $fillable = ['customer_name','phone_no','password','place'];
+    protected $fillable = ['customer_name','phone_no','password','place','address','zipcode'];
 
     public function Cart(){
         return $this->hasOne(Cart::class);

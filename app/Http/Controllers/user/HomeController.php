@@ -324,10 +324,31 @@ class HomeController
     public function placeOrder(Request $request)
     {
         $userId = auth()->guard('customer')->user()->id;
+        $customerProfile = Customer::where('id','=',$userId)->first();
         $cartItems = Customer::with('Cart.productsWithPivot')->where('id',auth()->guard('customer')->user()->id)->first();
         // dd($cartItems);
+
+        if($request->isMethod('POST'))
+        {
+            if($request->update_address)
+            {
+                $name = $request->name;
+                $address = $request->address;
+                $city = $request->city;
+                $zipcode = $request->zipcode;
+
+                $customerProfile->customer_name = $name;
+                $customerProfile->address = $address;
+                $customerProfile->place = $city;
+                $customerProfile->zipcode = $zipcode;
+                $customerProfile->save();
+
+                return redirect()->route('place_order')->with('success','Your address updated successfully');
+            }
+        }
         $data=[
-            'result'=>$cartItems
+            'result'=>$cartItems,
+            'customer'=>$customerProfile
         ];
         return view('users/place_order',$data);
     }

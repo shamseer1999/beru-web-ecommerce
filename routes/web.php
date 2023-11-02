@@ -30,4 +30,4 @@ Route::get('/remove-cart-item/{id}',[HomeController::class,'removeCartItem'])->n
 Route::post('/add-more-items',[HomeController::class,'addMoreItems'])->name('add_more_items');
 Route::post('/reduce-item-count',[HomeController::class,'reduceItemCount'])->name('reduce-item-count');
 
-Route::get('/place-order',[HomeController::class,'placeOrder'])->name('place_order');
+Route::match(['GET','POST'],'/place-order',[HomeController::class,'placeOrder'])->name('place_order');

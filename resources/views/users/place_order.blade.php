@@ -9,27 +9,37 @@
 </head>
 <body>
     <div class="container mt-5">
+        @if (session()->has('success'))
+            <div class="alert alert-success">{{session('success')}}</div>
+        @endif
+        @if (session()->has('danger'))
+            <div class="alert alert-danger">{{session('danger')}}</div>
+        @endif
         <span><a href="{{ route('cart') }}" class="text-decoration-none"><i class="fa fa-arrow-circle-left"></i> Cart</a></span>
         <h2>Checkout Products</h2>
         <div class="row">
             <div class="col-lg-7">
                 <h4>Shipping Information</h4>
-                <form>
+                <form method="POST" id="address-form">
+                    @csrf
                     <div class="mb-3">
                         <label for="fullName" class="form-label">Full Name</label>
-                        <input type="text" class="form-control" id="fullName" required>
+                        <input type="text" class="form-control" id="fullName" name="name" value="{{ $customer->customer_name }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
-                        <input type="text" class="form-control" id="address" required>
+                        <input type="text" class="form-control" name="address" id="address" value="{{ $customer->address }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="city" class="form-label">City</label>
-                        <input type="text" class="form-control" id="city" required>
+                        <input type="text" class="form-control" name="city" id="city" value="{{ $customer->place }}" required>
                     </div>
                     <div class="mb-3">
                         <label for="zipCode" class="form-label">Zip Code</label>
-                        <input type="text" class="form-control" id="zipCode" required>
+                        <input type="text" class="form-control" name="zipcode" id="zipCode" value="{{ $customer->zipcode }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" class="btn btn-primary" name="update_address" style="width:100%" value="Update Your Address">
                     </div>
                 </form>
             </div>
