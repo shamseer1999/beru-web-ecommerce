@@ -51,7 +51,7 @@
                                     <span style="padding-top:15px">{{ $item->name }} ({{ $item->pivot->product_count }} Items)</span>
                                     <span style="padding-top:15px">{{ $item->price * $item->pivot->product_count }}</span>
                                     @if ($countItems > 1)
-                                        <span style="padding-top:15px;cursor:pointer;" title="Remove Item"><i class="fa fa-close"></i></span>
+                                        <a href="{{ route('remove-cart-item',[encrypt($item->id),'redir'=>'place_order']) }}" onclick="return confirm('Are you sure you want to do this ?')" style="padding-top:15px;cursor:pointer;" title="Remove Item"><span ><i class="fa fa-close"></i></span></a>
                                     @endif
 
                                 </li>

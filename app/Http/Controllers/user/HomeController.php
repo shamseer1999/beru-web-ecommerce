@@ -253,8 +253,13 @@ class HomeController
     public function removeCartItem(Request $request,$id)
     {
         $itemId = decrypt($id);
+        $redir = $request->redir;
         $cart = auth()->guard('customer')->user()->cart;
         $cart->products()->detach($itemId); // related product remove
+        if(!empty($redir))
+        {
+            return redirect()->route($redir);
+        }
         return redirect()->route('cart');
     }
 
