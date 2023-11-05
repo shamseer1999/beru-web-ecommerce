@@ -34,6 +34,7 @@
         @endif
         <span><a href="{{ route('cart') }}" class="text-decoration-none"><i class="fa fa-arrow-circle-left"></i> Cart</a></span>
         <h2>Checkout Products</h2>
+
         <div class="row">
             <div class="col-lg-7">
                 <h4>Shipping Information</h4>
@@ -123,6 +124,15 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     <script>
+        function ConfirmHide()
+        {
+            $("#confirm-message").hide();
+        }
+        $(document).ready(function(){
+            setTimeout(() => {
+                ConfirmHide()
+            }, 2000);
+        })
         $("#place-order-btn").on('click',function(){
             var spinnerBtn = $("#spinner-btn")
             //find payment type
@@ -141,8 +151,15 @@
                 },
                 success:function(response){
                     console.log(response)
-                    spinnerBtn.hide()
-                    $("#place-order-btn").show()
+                    if(response.message == 'success')
+                    {
+                        spinnerBtn.hide()
+                        $("#place-order-btn").show()
+                        $("#confirm-message").show()
+                        $("#confirm-message").text('Your order placed successfully');
+                        window.location.href='{{ url("/cart") }}?status=success';
+                    }
+
                 }
             })
 

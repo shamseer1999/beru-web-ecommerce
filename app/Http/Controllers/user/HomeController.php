@@ -10,6 +10,8 @@ use App\Models\Wishlist;
 use App\Models\Cart;
 use App\Models\Admin;
 use App\Models\Customer;
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -348,7 +350,7 @@ class HomeController
         }
         $data=[
             'result'=>$cartItems,
-            'customer'=>$customerProfile
+            'customer'=>$customerProfile,
         ];
         return view('users/place_order',$data);
     }
@@ -364,24 +366,41 @@ class HomeController
 
                 $customer=Customer::where('id','=',$userId)->first();
 
-                $getCartedProducts = Customer::with('cart.productsWithPivot')->where('id','=',$userId)->first();
+                $cartItems = Customer::with('Cart.productsWithPivot')->where('id','=',$customer->id)->first();
 
-                foreach($getCartedProducts->cart->productsWithPivot as $items)
+                // Create order
+                $order = new Order();
+                $order->customer_id = $customer->id;
+                $order->shipping_place = $customer->place;
+                $order->customer_phone = $customer->phone_no;
+                $order->payment_type = $payType;
+                $order->order_status = 1;
+
+                if($order->save())
                 {
-                    $arr = array(
-                        'user_id'=>$userId,
-                        'user_place'=>$customer->place,
-                        'order_product'=>$items->id,
-                        'order_count'=>$items->pivot->product_count,
-                        'order_price'=>$items->price
+                    foreach($cartItems->cart->productsWithPivot as $item)
+                    {
 
-                    );
+                        // Create orderitems
+                        $orderItem = new OrderItem();
+                        $orderItem->product_id=$item->id;
+                        $orderItem->price=$item->price;
+                        $orderItem->order_count=$item->pivot->product_count;
+                        $orderItem->order_id=$order->id;
+                        $orderItem->save();
+
+                        // after save remove item from cart
+                        $cartItems->cart->products()->detach($item->id);
+
+
+                    }
+
                 }
+
                 $out = array(
                     'message'=>'success',
                     'user'=>$userId,
                     'pay_type'=>$payType,
-                    'cart'=>$getCartedProducts
                 );
             }else{
                 $out = array(

@@ -15,7 +15,11 @@
     cursor: pointer;
   }
 </style>
-@if (!empty($result))
+@if (Request::get('status') && Request::get('status') == 'success')
+<div class="alert alert-success" id="confirm-message">Your Order Placed Successfully</div>
+@endif
+
+@if (!empty($result->cart->productsWithPivot) && count($result->cart->productsWithPivot) > 0)
     @foreach ($result->cart->productsWithPivot as $item)
     <div class="card">
         <div class="card-body" style="width:25rem;">
@@ -45,7 +49,16 @@
 @endif
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script>
+    function ConfirmHide()
+    {
+        $("#confirm-message").hide();
+    }
     $(document).ready(function(){
+
+        setTimeout(() => {
+                ConfirmHide()
+            }, 2000);
+
         // alert('test')
         $('.add-more').on('click',function(){
             var dataId = $(this).data('id')
