@@ -31,3 +31,4 @@ Route::post('/add-more-items',[HomeController::class,'addMoreItems'])->name('add
 Route::post('/reduce-item-count',[HomeController::class,'reduceItemCount'])->name('reduce-item-count');
 
 Route::match(['GET','POST'],'/place-order',[HomeController::class,'placeOrder'])->name('place_order');
+Route::post('/place-order-confirm',[HomeController::class,'placeOrderConfirm'])->name('place_order_confirm');

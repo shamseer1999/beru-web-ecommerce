@@ -4,8 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BERU E-Commerce</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .spinner {
+           width: 56px;
+           height: 56px;
+           border-radius: 50%;
+           border: 9px solid;
+           border-color: #474bff #0000;
+           animation: spinner-0tkp9a 1s infinite;
+        }
+
+        @keyframes spinner-0tkp9a {
+           to {
+              transform: rotate(.5turn);
+           }
+        }
+        </style>
 </head>
 <body>
     <div class="container mt-5">
@@ -97,12 +114,39 @@
                         Cash on Delivery
                     </label>
                 </div>
-                <button class="btn btn-primary mt-3">Place Order</button>
+                <button class="btn btn-white mt-3" id="spinner-btn" style="display: none"><div class="spinner"></div></button>
+                <button class="btn btn-primary mt-3" id="place-order-btn">Place Order</button>
             </div>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script>
+        $("#place-order-btn").on('click',function(){
+            var spinnerBtn = $("#spinner-btn")
+            //find payment type
+            var selectPaymentType = $("input[name=paymentType]:checked").val()
+            spinnerBtn.show()
+            $("#place-order-btn").hide()
+
+            $.ajax({
+                headers:{
+                    'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+                },
+                url:"{{url('/place-order-confirm')}}",
+                type:'POST',
+                data:{
+                    payType:selectPaymentType
+                },
+                success:function(response){
+                    console.log(response)
+                    spinnerBtn.hide()
+                    $("#place-order-btn").show()
+                }
+            })
+
+        })
+    </script>
 </body>
 </html>

@@ -352,4 +352,48 @@ class HomeController
         ];
         return view('users/place_order',$data);
     }
+
+    public function placeOrderConfirm(Request $request)
+    {
+        if(auth()->guard('customer')->user())
+        {
+            $userId =auth()->guard('customer')->user()->id;
+            if($request->isMethod('POST'))
+            {
+                $payType = $request->payType;
+
+                $customer=Customer::where('id','=',$userId)->first();
+
+                $getCartedProducts = Customer::with('cart.productsWithPivot')->where('id','=',$userId)->first();
+
+                foreach($getCartedProducts->cart->productsWithPivot as $items)
+                {
+                    $arr = array(
+                        'user_id'=>$userId,
+                        'user_place'=>$customer->place,
+                        'order_product'=>$items->id,
+                        'order_count'=>$items->pivot->product_count,
+                        'order_price'=>$items->price
+
+                    );
+                }
+                $out = array(
+                    'message'=>'success',
+                    'user'=>$userId,
+                    'pay_type'=>$payType,
+                    'cart'=>$getCartedProducts
+                );
+            }else{
+                $out = array(
+                    'message'=>'not_process'
+                );
+            }
+        }else{
+            $out = array(
+                'message'=>'not_authenticated'
+            );
+        }
+
+        return response()->json($out);
+    }
 }
