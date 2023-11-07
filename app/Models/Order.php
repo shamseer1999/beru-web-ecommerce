@@ -10,4 +10,9 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = ['customer_id','shipping_place','customer_phone','payment_type','order_status'];
+
+    public function Customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
 }

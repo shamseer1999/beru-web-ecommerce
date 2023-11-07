@@ -14,6 +14,8 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderMail;
 
 class HomeController
 {
@@ -396,6 +398,9 @@ class HomeController
                     }
 
                 }
+
+                // Do mail
+                Mail::to('ahammedshamseer666@gmail.com')->send(new OrderMail($order));
 
                 $out = array(
                     'message'=>'success',
