@@ -99,8 +99,14 @@
                                             </div>
                                             <hr>
                                             <div class="card-body">
-                                                <div class="text-right buttons"> <button class="btn btn-outline-dark" id="wishlist-btn" onclick="addToWishlist({{$item->id}})" data-id="{{$item->id}}">add to
-                                                        wishlist</button> <button class="btn btn-dark" onclick="addToCart({{$item->id}})" data-id="{{$item->id}}">Add to cart</button>
+                                                <div class="text-right buttons">
+                                                    @if ($item->product_stock > 0)
+                                                        <button class="btn btn-outline-dark" id="wishlist-btn" onclick="addToWishlist({{$item->id}})" data-id="{{$item->id}}">add to wishlist</button>
+                                                        <button class="btn btn-dark" onclick="addToCart({{$item->id}})" data-id="{{$item->id}}">Add to cart</button>
+                                                    @else
+                                                        <label for="" style="color: rgb(241, 154, 154)">Currently unavailable</label>
+                                                    @endif
+
                                                 </div>
                                             </div>
                                         </div>

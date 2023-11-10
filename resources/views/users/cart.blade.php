@@ -20,6 +20,9 @@
 @endif
 
 @if (!empty($result->cart->productsWithPivot) && count($result->cart->productsWithPivot) > 0)
+@php
+    $unavailable = 0
+@endphp
     @foreach ($result->cart->productsWithPivot as $item)
     <div class="card">
         <div class="card-body" style="width:25rem;">
@@ -30,25 +33,41 @@
                       <a href="{{ route('remove-cart-item',encrypt($item->id)) }}" onclick="return confirm('Are you sure you want to do this ?')" style="float:right">X</a>
                       <img src="{{ asset('storage/products/'.$item->image)}}" alt="" style="width:100%;object-fit:cover;">
 
-                      <div class="price-div">
-                        <input type="hidden" id="single-price" value="{{ $item->price }}">
-                        <p id="price-section{{ $item->pivot->id }}">₹ {{ $item->price * $item->pivot->product_count }}</p>
-                        <div>
-                          <i class="fa fa-plus add-more" data-id="{{ $item->pivot->id }}"></i>
-                          <input type="number" style="width:15%;text-align:center" id="count-id-{{ $item->pivot->id }}" value="{{ $item->pivot->product_count }}">
-                          <i class="fa fa-minus reduce-count" data-id="{{ $item->pivot->id }}"></i>
-                        </div>
+                        @if ($item->product_stock > 9)
+                        <div class="price-div">
+                            <input type="hidden" id="single-price" value="{{ $item->price }}">
+                            <p id="price-section{{ $item->pivot->id }}">₹ {{ $item->price * $item->pivot->product_count }}</p>
+                            <div>
+                              <i class="fa fa-plus add-more" data-id="{{ $item->pivot->id }}"></i>
+                              <input type="number" style="width:15%;text-align:center" id="count-id-{{ $item->pivot->id }}" value="{{ $item->pivot->product_count }}">
+                              <i class="fa fa-minus reduce-count" data-id="{{ $item->pivot->id }}"></i>
+                            </div>
 
-                      </div>
+                          </div>
+                        @else
+                        @php
+                            $unavailable += 1
+                        @endphp
+                        <label for="" style="color: rgb(241, 154, 154)">Currently unavailable</label>
+                        @endif
+
                     </div>
                   </div>
         </div>
       </div>
     @endforeach
-    <a href="{{ route('place_order') }}" class="btn btn-outline-success btn-lg" style="float:right;margin:10px 10px">Place Order</a>
+    <a href="{{ route('place_order') }}" class="btn btn-outline-success btn-lg" onclick="return checkUnavailable({{ $unavailable }})" style="float:right;margin:10px 10px">Place Order</a>
 @endif
 <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 <script>
+    function checkUnavailable(vl)
+    {
+        if( vl > 0)
+        {
+            alert('Some of your items are out of stock. Remove items')
+            return false
+        }
+    }
     function ConfirmHide()
     {
         $("#confirm-message").hide();

@@ -394,6 +394,12 @@ class HomeController
                         // after save remove item from cart
                         $cartItems->cart->products()->detach($item->id);
 
+                        //reduce stock count
+                        $productItem = Product::where('id','=',$item->id)->first();
+                        $stockCount = $productItem->product_stock;
+                        $productItem->product_stock = $stockCount - 1;
+                        $productItem->save();
+
 
                     }
 
