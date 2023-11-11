@@ -1,15 +1,20 @@
 <section>
-    <div class="container-fluid"> <output class="bg-white shadow-sm">
-            <footer class="section-footer border-top">
+    <style>
+        .logo-footer{
+            font-size: 36px;
+        }
+    </style>
+    <div class="container-fluid" style="background:#ede8e8;">
+        <output class="bg-white shadow-sm" style="width: 100%">
+            <footer class="section-footer border-top" style="background:#ede8e8;">
                 <div class="container-fluid">
                     <section class="footer-top padding-y">
                         <div class="row">
                             <aside class="col-md-4">
-                                <article class="mr-3"> <img src="https://i.imgur.com/S5Zdt8L.png"
-                                        class="logo-footer">
-                                    <p class="mt-3 description">Some short text about company like You might
-                                        remember the Dell computer commercials in which a youth reports this
-                                        exciting news to his friends.</p>
+                                <article class="mr-3">
+                                        <a href="" class="logo-footer">BERU</a>
+                                    <p class="mt-3 description">Beru: Elevate your digital experience with cutting-edge electronics – sleek smartphones,
+                                         powerful tablets, and high-performance laptops, all at affordable prices..</p>
                                     <div> <a class="btn btn-icon btn-light" title="Facebook" target="_blank"
                                             href="#" data-abc="true"><i class="fab fa-facebook-f"></i></a> <a
                                             class="btn btn-icon btn-light" title="Instagram" target="_blank"
@@ -48,11 +53,12 @@
                                 </ul>
                             </aside>
                             <aside class="col-sm-2 col-md-2">
-                                <h6 class="title">Our app</h6> <a href="#" class="d-block mb-2"
-                                    data-abc="true"><img class="img-responsive"
-                                        src="https://i.imgur.com/nkZP7fe.png" height="40"></a> <a href="#"
-                                    class="d-block mb-2" data-abc="true"><img class="img-responsive"
-                                        src="https://i.imgur.com/47q2YGt.png" height="40" width="123"></a>
+                                <h6 class="title">Contact Us</h6>
+                                <div style="position:relative">
+                                    <input type="email" name="email" class="form-control">
+                                    <input type="submit" value="Subscribe" class="btn btn-primary" style="position: absolute;top: -1px;right: 0px;">
+                                </div>
+
                             </aside>
                         </div>
                     </section>
