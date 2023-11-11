@@ -15,4 +15,25 @@ class Order extends Model
     {
         return $this->belongsTo(Customer::class);
     }
+
+    public function OrderItems()
+    {
+        return $this->hasmany(OrderItem::class);
+    }
+
+    public function getOrderStatusAttribute($value)
+    {
+        switch ($value) {
+            case 1:
+                return 'Pending';
+            case 2:
+                return 'Processing';
+            case 3:
+                return 'Delivered';
+            case 4:
+                return 'Cancelled';
+            default:
+                return 'Unknown';
+        }
+    }
 }

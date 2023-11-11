@@ -17,7 +17,6 @@
                   <div class="card-body">
                     <div class="text-right buttons">
                         @if ($val->product_stock > 0)
-                            <button class="btn btn-outline-dark" id="wishlist-btn" onclick="addToWishlist({{$val->id}})" data-id="{{$val->id}}">add to wishlist</button>
                             <button class="btn btn-dark" onclick="addToCart({{$val->id}})" data-id="{{$val->id}}">Add to cart</button>
                         @else
                             <label for="" style="color: rgb(241, 154, 154)">Currently unavailable</label>

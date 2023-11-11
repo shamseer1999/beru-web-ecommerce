@@ -10,6 +10,8 @@ use App\Http\Controllers\admin\CategoryController;
 
 use App\Http\Controllers\admin\ProductController;
 
+use App\Http\Controllers\admin\OrderController;
+
 Route::prefix('admin')->name('admin.')->group(function(){
 
     Route::get('',[HomeController::class,'login'])->name('login');
@@ -42,7 +44,11 @@ Route::prefix('admin')->name('admin.')->group(function(){
             Route::match(['GET','POST'],'edit/{id}',[BannerController::class,'edit'])->name('edit');
         });
 
+        Route::prefix('orders')->name('order.')->group(function(){
+            Route::get('list',[OrderController::class,'index'])->name('list');
+        });
+
         Route::get('logout',[HomeController::class,'logout'])->name('logout');
     });
-    
+
 });
